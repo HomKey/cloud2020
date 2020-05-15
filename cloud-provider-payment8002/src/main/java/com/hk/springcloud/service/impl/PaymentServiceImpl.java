@@ -1,9 +1,9 @@
 package com.hk.springcloud.service.impl;
 
-import com.hk.springcloud.dao.PaymentDao;
 import com.hk.springcloud.entities.Payment;
 import com.hk.springcloud.service.PaymentService;
 import org.springframework.stereotype.Service;
+import com.hk.springcloud.dao.PaymentDao;
 
 import javax.annotation.Resource;
 

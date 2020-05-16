@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/payment")
@@ -23,7 +24,7 @@ public class PaymentController {
     @Resource
     private DiscoveryClient discoveryClient;
 
-    @Value("server.port")
+    @Value("${server.port}")
     private String serverPort;
 
     @PostMapping(value = "/create")
@@ -48,7 +49,7 @@ public class PaymentController {
         }
     }
 
-    @GetMapping(value = "/payment/discovery")
+    @GetMapping(value = "/discovery")
     public Object getDiscoveryClient(){
         List<String> services = discoveryClient.getServices();
         for (String service : services) {
@@ -57,5 +58,21 @@ public class PaymentController {
         List<ServiceInstance> instances = discoveryClient.getInstances("CLOUD-PAYMENT-SERVICE");
         log.info(instances.toString());
         return discoveryClient;
+    }
+
+    @GetMapping(value = "/lb")
+    public String getPaymentLB() {
+        return serverPort;
+    }
+
+    @GetMapping(value = "/feign/timeout")
+    public String paymentFeignTimeout() {
+        try {
+            // 暂停3秒钟
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return serverPort;
     }
 }
